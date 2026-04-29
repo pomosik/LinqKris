@@ -1,0 +1,73 @@
+namespace Linq;
+
+public class Linq
+{
+    public static void Main(string[] args)
+    {
+
+        List<string> nameList = new List<string>() { "kris", "zvasilv", "mephi", "ranny", "danil_kolbas_57461", "Autism_67_AAAAAAAA", "ап" };
+        List<int> keyList = new List<int>();
+        Dictionary<int, List<string>> dictionary = new Dictionary<int, List<string>>();
+
+        foreach (string name in nameList) // получаем длину всех строк и суём в соответствующий лист
+        {
+            keyList.Add(name.Length);
+        }
+        keyList = keyList.OrderBy(n => n).ToList(); // сортировка от меньшего к большему, чтобы потом красиво расставить key значения
+
+        foreach (int key in keyList)
+        {
+            dictionary[key] = new List<string>();
+
+            foreach (string value in nameList.Where(n => n.Length == key)) // каждое слово, которое == key .Length == key;
+            {
+                dictionary[key].Add(value); // добавляем каждое слово, которое содержит нужное число символов
+            }
+        }
+
+        foreach (int key in keyList) // проверка
+        {
+            Console.WriteLine($"Value: {string.Join(", ", dictionary[key])}, Key: {key}");
+        }
+        
+        // Задание 3
+        
+        while (true)
+        {
+            string input = Console.ReadLine()!;
+
+            if (input == "exit")
+            {
+                break;
+            }
+
+            if (!int.TryParse(input, out int newInput))
+            {
+                Console.WriteLine("Ошибка: введён неизвестный тип. Ожидаемый тип: int");
+                continue;
+            }
+
+            Console.WriteLine(dictionary.Keys.Contains(newInput) ? string.Join(", ", dictionary[newInput]) : "Ошибка: по данному ключу нет никакого значения");
+        }
+
+        // Задание 4
+
+        int middle = (int)dictionary.Keys.Average(); // выводим в отдельную переменную, чтобы не высчитывать среднюю каждый отдельный раз
+
+        Console.WriteLine(string.Join(", ", dictionary[middle]));
+
+        // Задание 5
+
+        /*string mash = "";
+        foreach (var list in dictionary.Values)
+        {
+            foreach (string word in list)
+            {
+                mash += word;
+            }
+        }
+        Console.WriteLine(mash);
+
+        mash.Where(n => n);*/
+    }
+}
