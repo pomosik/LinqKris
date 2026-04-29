@@ -1,0 +1,34 @@
+namespace Linq;
+
+public class Linq
+{
+    public static void Main(string[] args)
+    {
+
+        List<string> nameList = new List<string>() { "kris", "zvasilv", "mephi", "ranny", "danil_kolbas_57461", "Autism_67_AAAAAAAA", "ап" };
+        List<int> keyList = new List<int>();
+        Dictionary<int, List<string>> dictionary = new Dictionary<int, List<string>>();
+
+        foreach (string name in nameList) // получаем длину всех строк и суём в соответствующий лист
+        {
+            keyList.Add(name.Length);
+        }
+        keyList = keyList.OrderBy(n => n).ToList(); // сортировка от меньшего к большему, чтобы потом красиво расставить key значения
+
+        foreach (int key in keyList)
+        {
+            dictionary[key] = new List<string>();
+
+            foreach (string word in nameList.Where(n => n.Length == key)) // каждое слово, которое == key .Length == key;
+            {
+                dictionary[key].Add(word); // добавляем каждое слово, которое содержит нужное число символов
+            }
+        }
+
+        foreach (int key in keyList) // проверка
+        {
+            Console.WriteLine($"Value: {string.Join(", ", dictionary[key])}, Key: {key}");
+        }
+        
+    }
+}
