@@ -1,0 +1,257 @@
+namespace CRUD;
+
+class CRUD
+{
+    private static void Main(string[] args)
+    {
+        Dictionary<int, string> nicknames = new Dictionary<int, string>
+        {
+            { 0, "Test"},
+            { 1, "3tst"}
+        };
+
+        RunMenu(nicknames);
+    }
+
+    public static void ErrorUserLog(string error)
+    {
+        Console.Clear();
+        Console.WriteLine($"Ошибка: {error}\n(нажмите любую кнопку, чтобы закрыть меню ошибки)");
+        Console.ReadKey();
+        Console.Clear();
+    }
+
+    public static void RunMenu(Dictionary<int, string> nicknames)
+    {
+        Console.Clear();
+        Console.WriteLine("CRUD MENU\n");
+        Console.WriteLine("1. Создать");
+        Console.WriteLine("2. Прочесть");
+        Console.WriteLine("3. Обновить");
+        Console.WriteLine("4. Удалить");
+        Console.WriteLine("\n(введите команду \"list\" для просмотра текущего листа)");
+        Console.WriteLine("\n");
+
+        string inputToCheck = Console.ReadLine()!;
+
+        if (inputToCheck == "list")
+        {
+            Console.Clear();
+            CheckNicknames(nicknames);
+            Console.ReadKey();
+            RunMenu(nicknames);
+        }
+
+        if (!int.TryParse(inputToCheck, out int input))
+        {
+            ErrorUserLog("Выбран неверный варинт");
+            RunMenu(nicknames);
+        }
+
+        switch(input)
+        {
+            case 1:
+                Create(nicknames);
+                break;
+            case 2:
+                Read(nicknames);
+                break;
+            case 3:
+                Update(nicknames);
+                break;
+            case 4:
+                Delite(nicknames);
+                break;
+
+            default:
+                ErrorUserLog("Выбран неверный варинт");
+                RunMenu(nicknames);
+                break;
+        }
+
+        RunMenu(nicknames);
+    }
+
+    // ---- main func ----
+
+    public static void CheckNicknames(Dictionary<int, string> nicknames)
+    {
+        foreach (int key in nicknames.Keys)
+        {
+            Console.WriteLine($"[{key}]: {nicknames[key]}");
+        }
+    }
+
+    public static void Create(Dictionary<int, string> nicknames)
+    {
+        Console.Clear();
+        Console.WriteLine("<id> <Имя> | Меню создания (id вводить необязательно. в этом случаи имя добавится первый свободный слот).\n\n(для выхода напишите команду exit)\n");
+
+        string inputToCheck = Console.ReadLine()!;
+
+        if (inputToCheck == "exit")
+        {
+            RunMenu(nicknames);
+        } 
+
+        string[] idAndName = inputToCheck.Split(" ");
+
+        if (idAndName.Count() != 2)
+        {
+            ErrorUserLog("Введенно не 2 ожидаемых значеня");
+            Create(nicknames);
+        }
+
+        if(!int.TryParse(idAndName[0], out int id))
+        {
+            ErrorUserLog("Введён некоректный id пользователя");
+            Create(nicknames);
+        }
+
+        string name = idAndName[1];
+
+        if(id < 0)
+        {
+            ErrorUserLog("id не может быть отрицательным");
+            Create(nicknames);
+        }
+
+        if (nicknames.Keys.Contains(id))
+        {
+            ErrorUserLog("Такой id уже зарезервирован");
+            Create(nicknames);
+        }
+
+        nicknames[id] = name;
+
+        Console.Clear();
+        CheckNicknames(nicknames);
+        Console.ReadKey();
+        Create(nicknames);
+    }
+
+    public static void Read(Dictionary<int, string> nicknames)
+    {
+        Console.Clear();
+        Console.WriteLine("<id> | Меню чтения\n\n(для выхода напишите команду exit)\n");
+
+        string inputToCheck = Console.ReadLine()!;
+
+        if (inputToCheck == "exit")
+        {
+            RunMenu(nicknames);
+        }
+
+        if (!int.TryParse(inputToCheck, out int id))
+        {
+            ErrorUserLog("Введён некоректный id пользователя");
+            Read(nicknames);
+        }
+
+        if (!nicknames.Keys.Contains(id))
+        {
+            ErrorUserLog("Под таким id ничего не найдено");
+            Read(nicknames);
+        }
+
+        Console.WriteLine($"[{id}]: {nicknames[id]}");
+
+        Console.Clear();
+        CheckNicknames(nicknames);
+        Console.ReadKey();
+        Read(nicknames);
+
+    }
+
+    public static void Update(Dictionary<int, string> nicknames)
+    {
+        Console.Clear();
+        Console.WriteLine("<id> <Имя> | Меню обновления\n\n(для выхода напишите команду exit)\n");
+
+        string inputToCheck = Console.ReadLine()!;
+
+        if (inputToCheck == "exit")
+        {
+            RunMenu(nicknames);
+        }
+
+        string[] idAndName = inputToCheck.Split(" ");
+
+        if (idAndName.Count() != 2)
+        {
+            ErrorUserLog("Введенно не 2 ожидаемых значеня");
+            Update(nicknames);
+        }
+
+        if(!int.TryParse(idAndName[0], out int id))
+        {
+            ErrorUserLog("Введён некоректный id пользователя");
+            Update(nicknames);
+        }
+
+        string name = idAndName[1];
+
+        if(id < 0)
+        {
+            ErrorUserLog("id не может быть отрицательным");
+            Update(nicknames);
+        }
+
+        if (!nicknames.Keys.Contains(id))
+        {
+            ErrorUserLog("Под таким id ничего не найдено");
+            Update(nicknames);
+        }
+
+        nicknames[id] = name;
+
+        Console.Clear();
+        CheckNicknames(nicknames);
+        Console.ReadKey();
+        Update(nicknames);
+    }
+
+    public static void Delite(Dictionary<int, string> nicknames) // можно дописать штуку. мы показываем, какой id удалён
+    {
+        Console.Clear();
+        Console.WriteLine("<id> | Меню удаления\n\n(для выхода напишите команду exit)\n");
+
+        string inputToCheck = Console.ReadLine()!;
+
+        if (inputToCheck == "exit")
+        {
+            RunMenu(nicknames);
+        } 
+
+        if (!int.TryParse(inputToCheck, out int id))
+        {
+            ErrorUserLog("Введён некоректный id пользователя");
+            Delite(nicknames);
+        }
+
+        if (!nicknames.Keys.Contains(id))
+        {
+            ErrorUserLog("Под таким id ничего не найдено");
+            Delite(nicknames);
+        }
+
+        Console.Clear();
+        Console.WriteLine("Вы уверены: y / n");
+        
+        string confirm = Console.ReadLine()!;
+
+        if (confirm == "n")
+        {
+            Delite(nicknames);
+        }
+
+        nicknames.Remove(id);
+        
+        Console.Clear();
+        nicknames[id] = "<-- была удалена эта строка";
+        CheckNicknames(nicknames);
+        nicknames.Remove(id);
+        Console.ReadKey();
+        Delite(nicknames);
+    }
+}
