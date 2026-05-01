@@ -85,7 +85,7 @@ class CRUD
     public static void Create(Dictionary<int, string> nicknames)
     {
         Console.Clear();
-        Console.WriteLine("<id> <Имя> | Меню создания (id вводить необязательно. в этом случаи имя добавится первый свободный слот).\n\n(для выхода напишите команду exit)\n");
+        Console.WriteLine("<id> <Имя> | Меню создания\n\n(для выхода напишите команду exit)\n");
 
         string inputToCheck = Console.ReadLine()!;
 
@@ -154,11 +154,10 @@ class CRUD
             Read(nicknames);
         }
 
-        Console.WriteLine($"[{id}]: {nicknames[id]}");
-
         Console.Clear();
-        CheckNicknames(nicknames);
+        Console.WriteLine($"[{id}]: {nicknames[id]}");
         Console.ReadKey();
+        Console.Clear();
         Read(nicknames);
 
     }
@@ -235,23 +234,28 @@ class CRUD
             Delite(nicknames);
         }
 
-        Console.Clear();
-        Console.WriteLine("Вы уверены: y / n");
-        
-        string confirm = Console.ReadLine()!;
-
-        if (confirm == "n")
+        while(true)
         {
-            Delite(nicknames);
-        }
+            Console.Clear();
+            Console.WriteLine("Вы уверены: y / n");
+            string confirm = Console.ReadLine()!;
 
-        nicknames.Remove(id);
+            if (confirm == "n")
+            {
+                Delite(nicknames);
+            }
+
+            if (confirm == "y")
+            {
+                nicknames.Remove(id);
         
-        Console.Clear();
-        nicknames[id] = "<-- была удалена эта строка";
-        CheckNicknames(nicknames);
-        nicknames.Remove(id);
-        Console.ReadKey();
-        Delite(nicknames);
+                Console.Clear();
+                nicknames[id] = "<-- была удалена эта строка";
+                CheckNicknames(nicknames);
+                nicknames.Remove(id);
+                Console.ReadKey();
+                Delite(nicknames);
+            }
+        }
     }
 }
